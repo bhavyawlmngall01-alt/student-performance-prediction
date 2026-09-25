@@ -1,90 +1,95 @@
 import sys
 import os
 import json
+from http.server import BaseHTTPRequestHandler
 
 # Allow the API file to import model_service.py
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 
 from model_service import predict_student
 
 
-def handler(request):
-    """
-    Vercel Python API endpoint.
+class handler(BaseHTTPRequestHandler):
 
-    Expected JSON:
-    {
-        "attendance": 85,
-        "study_hours": 6.5,
-        "previous_marks": 75,
-        "assignments": 18,
-        "sleep_hours": 7.5,
-        "internet_access": "Yes",
-        "extra_classes": "No",
-        "model_type": "random_forest"
-    }
-    """
+    def _send_json(self, status_code, data):
+        response = json.dumps(data).encode("utf-8")
 
-    try:
-        # Handle OPTIONS request for browser CORS
-        if request.method == "OPTIONS":
-            return {
-                "statusCode": 200,
-                "headers": {
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Content-Type",
-                },
-                "body": ""
-            }
-
-        if request.method != "POST":
-            return {
-                "statusCode": 405,
-                "headers": {
-                    "Content-Type": "application/json"
-                },
-                "body": json.dumps({
-                    "error": "Only POST requests are allowed."
-                })
-            }
-
-        data = request.body
-
-        if isinstance(data, bytes):
-            data = data.decode("utf-8")
-
-        if isinstance(data, str):
-            data = json.loads(data)
-
-        result = predict_student(
-            attendance=float(data["attendance"]),
-            study_hours=float(data["study_hours"]),
-            previous_marks=float(data["previous_marks"]),
-            assignments=float(data["assignments"]),
-            sleep_hours=float(data["sleep_hours"]),
-            internet_access=data.get("internet_access", "Yes"),
-            extra_classes=data.get("extra_classes", "No"),
-            model_type=data.get("model_type", "random_forest")
+        self.send_response(status_code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header(
+            "Access-Control-Allow-Methods",
+            "POST, OPTIONS"
         )
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type"
+        )
+        self.end_headers()
 
-        return {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            },
-            "body": json.dumps(result)
-        }
+        self.wfile.write(response)
 
-    except Exception as e:
-        return {
-            "statusCode": 500,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            },
-            "body": json.dumps({
-                "error": str(e)
-            })
-        }
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header(
+            "Access-Control-Allow-Methods",
+            "POST, OPTIONS"
+        )
+        self.send_header(
+            "Access-Control-Allow-Headers",
+            "Content-Type"
+        )
+        self.end_headers()
+
+    def do_POST(self):
+        try:
+            # Read request body
+            content_length = int(
+                self.headers.get("Content-Length", 0)
+            )
+
+            body = self.rfile.read(content_length)
+
+            data = json.loads(body.decode("utf-8"))
+
+            # Run ML prediction
+            result = predict_student(
+                attendance=float(data["attendance"]),
+                study_hours=float(data["study_hours"]),
+                previous_marks=float(data["previous_marks"]),
+                assignments=float(data["assignments"]),
+                sleep_hours=float(data["sleep_hours"]),
+                internet_access=data.get(
+                    "internet_access",
+                    "Yes"
+                ),
+                extra_classes=data.get(
+                    "extra_classes",
+                    "No"
+                ),
+                model_type=data.get(
+                    "model_type",
+                    "random_forest"
+                )
+            )
+
+            self._send_json(200, result)
+
+        except Exception as e:
+            self._send_json(
+                500,
+                {
+                    "error": str(e)
+                }
+            )
+
+    def do_GET(self):
+        self._send_json(
+            200,
+            {
+                "message": "Student Performance Prediction API is running."
+            }
+        )
