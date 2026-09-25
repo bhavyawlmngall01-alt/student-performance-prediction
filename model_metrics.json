@@ -1,0 +1,33 @@
+{
+    "model_name": "Linear Regression",
+    "dataset_records": 10000,
+    "train_samples": 8000,
+    "test_samples": 2000,
+    "features": [
+        "Attendance_%",
+        "Study_Hours_Per_Day",
+        "Assignments_Completed",
+        "Sleep_Hours"
+    ],
+    "target": "Previous_Marks",
+    "intercept": 55.42940272853321,
+    "coefficients": {
+        "Attendance_%": -0.013431948010651009,
+        "Study_Hours_Per_Day": 2.984256369969413,
+        "Assignments_Completed": -0.03095381255877941,
+        "Sleep_Hours": -0.10462351631245057
+    },
+    "evaluation": {
+        "mean_squared_error": 165.6866,
+        "root_mean_squared_error": 12.8719,
+        "mean_absolute_error": 10.3152,
+        "r2_score": 0.1352
+    },
+    "dataset_averages": {
+        "attendance_mean": 78.8,
+        "study_hours_mean": 4.9,
+        "previous_marks_mean": 67.65,
+        "assignments_mean": 16.21,
+        "sleep_hours_mean": 7.1
+    }
+}

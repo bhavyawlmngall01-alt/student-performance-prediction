@@ -1,0 +1,14 @@
+__pycache__/
+.ipynb_checkpoints/
+.streamlit/
+anaconda_projects/
+*.pyc
+.env
+.venv/
+venv/
+
+# Project development files not needed for Vercel
+*.ipynb
+*.pdf
+*.xlsx
+*.csv

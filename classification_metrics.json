@@ -1,0 +1,220 @@
+{
+    "dataset_records": 10000,
+    "target": "Final_Result",
+    "classes": [
+        "Fail",
+        "Pass"
+    ],
+    "features": [
+        "Attendance_%",
+        "Study_Hours_Per_Day",
+        "Previous_Marks",
+        "Assignments_Completed",
+        "Sleep_Hours",
+        "Internet_Access",
+        "Extra_Classes"
+    ],
+    "encoded_features": [
+        "Attendance_%",
+        "Study_Hours_Per_Day",
+        "Previous_Marks",
+        "Assignments_Completed",
+        "Sleep_Hours",
+        "Internet_Access_Yes",
+        "Extra_Classes_Yes"
+    ],
+    "class_distribution": {
+        "Pass": 9364,
+        "Fail": 636,
+        "pass_rate_pct": 93.64
+    },
+    "models": {
+        "random_forest": {
+            "name": "Random Forest Classifier",
+            "short_name": "Random Forest",
+            "icon": "\ud83c\udf32",
+            "algorithm": "Ensemble of 150 Bootstrap Decision Trees",
+            "hyperparameters": {
+                "n_estimators": 150,
+                "max_depth": 8,
+                "min_samples_leaf": 4,
+                "random_state": 42
+            },
+            "evaluation": {
+                "accuracy": 0.94,
+                "precision": 0.9456,
+                "recall": 0.9931,
+                "f1_score": 0.9688,
+                "roc_auc": 0.891,
+                "confusion_matrix": {
+                    "true_fail_pred_fail (TN)": 20,
+                    "true_fail_pred_pass (FP)": 107,
+                    "true_pass_pred_fail (FN)": 13,
+                    "true_pass_pred_pass (TP)": 1860,
+                    "raw_matrix": [
+                        [
+                            20,
+                            107
+                        ],
+                        [
+                            13,
+                            1860
+                        ]
+                    ]
+                }
+            },
+            "feature_importances": {
+                "Attendance_%": 0.1311,
+                "Study_Hours_Per_Day": 0.4058,
+                "Previous_Marks": 0.1885,
+                "Assignments_Completed": 0.1583,
+                "Sleep_Hours": 0.0729,
+                "Internet_Access_Yes": 0.0242,
+                "Extra_Classes_Yes": 0.0192
+            },
+            "strengths": [
+                "High accuracy and superior generalization via bagging",
+                "Robust against overfitting on edge-case outliers",
+                "Provides reliable continuous class probabilities"
+            ]
+        },
+        "decision_tree": {
+            "name": "Decision Tree Classifier",
+            "short_name": "Decision Tree",
+            "icon": "\ud83c\udf33",
+            "algorithm": "CART (Classification and Regression Trees)",
+            "hyperparameters": {
+                "criterion": "gini",
+                "max_depth": 5,
+                "min_samples_leaf": 10,
+                "random_state": 42
+            },
+            "evaluation": {
+                "accuracy": 0.937,
+                "precision": 0.9514,
+                "recall": 0.9829,
+                "f1_score": 0.9669,
+                "roc_auc": 0.8388,
+                "confusion_matrix": {
+                    "true_fail_pred_fail (TN)": 33,
+                    "true_fail_pred_pass (FP)": 94,
+                    "true_pass_pred_fail (FN)": 32,
+                    "true_pass_pred_pass (TP)": 1841,
+                    "raw_matrix": [
+                        [
+                            33,
+                            94
+                        ],
+                        [
+                            32,
+                            1841
+                        ]
+                    ]
+                }
+            },
+            "feature_importances": {
+                "Attendance_%": 0.0788,
+                "Study_Hours_Per_Day": 0.6145,
+                "Previous_Marks": 0.155,
+                "Assignments_Completed": 0.0814,
+                "Sleep_Hours": 0.0006,
+                "Internet_Access_Yes": 0.043,
+                "Extra_Classes_Yes": 0.0265
+            },
+            "strengths": [
+                "Highly interpretable with clear if-else decision rules",
+                "Captures non-linear thresholds in study hours & attendance",
+                "Requires minimal data transformation"
+            ]
+        },
+        "logistic_regression": {
+            "name": "Logistic Regression Classifier",
+            "short_name": "Logistic Regression",
+            "icon": "\ud83d\udcca",
+            "algorithm": "Generalized Linear Model with Logit Link Function",
+            "hyperparameters": {
+                "penalty": "l2",
+                "C": 1.0,
+                "solver": "lbfgs",
+                "max_iter": 1000,
+                "random_state": 42
+            },
+            "evaluation": {
+                "accuracy": 0.9435,
+                "precision": 0.949,
+                "recall": 0.9931,
+                "f1_score": 0.9705,
+                "roc_auc": 0.8995,
+                "confusion_matrix": {
+                    "true_fail_pred_fail (TN)": 27,
+                    "true_fail_pred_pass (FP)": 100,
+                    "true_pass_pred_fail (FN)": 13,
+                    "true_pass_pred_pass (TP)": 1860,
+                    "raw_matrix": [
+                        [
+                            27,
+                            100
+                        ],
+                        [
+                            13,
+                            1860
+                        ]
+                    ]
+                }
+            },
+            "coefficients": {
+                "Attendance_%": 0.4814,
+                "Study_Hours_Per_Day": 1.3176,
+                "Previous_Marks": 0.7378,
+                "Assignments_Completed": 0.4549,
+                "Sleep_Hours": -0.038,
+                "Internet_Access_Yes": 0.825,
+                "Extra_Classes_Yes": 0.5867
+            },
+            "strengths": [
+                "Direct probabilistic interpretations through log-odds ratios",
+                "Computationally efficient with convex optimization guarantees",
+                "Ideal baseline for linear decision boundary validation"
+            ]
+        },
+        "knn": {
+            "name": "K-Nearest Neighbors Classifier (KNN)",
+            "short_name": "K-Nearest Neighbors",
+            "icon": "\ud83d\udd0d",
+            "algorithm": "Instance-Based Non-Parametric Classifier (k=5)",
+            "hyperparameters": {
+                "n_neighbors": 5,
+                "weights": "distance",
+                "metric": "minkowski (p=2 Euclidean)"
+            },
+            "evaluation": {
+                "accuracy": 0.939,
+                "precision": 0.9497,
+                "recall": 0.9872,
+                "f1_score": 0.9681,
+                "roc_auc": 0.7453,
+                "confusion_matrix": {
+                    "true_fail_pred_fail (TN)": 29,
+                    "true_fail_pred_pass (FP)": 98,
+                    "true_pass_pred_fail (FN)": 24,
+                    "true_pass_pred_pass (TP)": 1849,
+                    "raw_matrix": [
+                        [
+                            29,
+                            98
+                        ],
+                        [
+                            24,
+                            1849
+                        ]
+                    ]
+                }
+            },
+            "strengths": [
+                "Non-parametric model with zero training phase assumptions",
+                "Naturally captures complex local neighborhood clusters",
+                "Weighted inverse distance enhances prediction precision"
+            ]
+        }
+    }
+}
